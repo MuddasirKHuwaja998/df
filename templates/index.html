@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Previsione del Test Audiometrico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            background-image: url("https://www.otofarmaspa.com/wp-content/uploads/2023/05/Schermata-2023-05-04-alle-12.38.23.png");
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            grid-column: span 2;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7f3fe;
+            border-left: 5px solid #2196F3;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.otofarmaspa.com/wp-content/uploads/2022/11/cropped-Logo-otofarma-png-1.png" alt="Logo Otofarma">
+    </header>
+    
+    <div class="container">
+        <h1>Previsione del Test Audiometrico</h1>
+        <h2>I tuoi dati sono stati estratti dal percorso "C:\test.txt" e auto-popolati nel modello.</h2>
+
+        <form method="POST">
+            {% for i in range(6) %}
+            <div>
+                <label>Orecchio Sinistro {{ i + 1 }}</label>
+                <input type="number" name="left_{{ i }}" value="{{ left_frequencies[i] }}" step="0.1" required>
+            </div>
+            <div>
+                <label>Orecchio Destro {{ i + 1 }}</label>
+                <input type="number" name="right_{{ i }}" value="{{ right_frequencies[i] }}" step="0.1" required>
+            </div>
+            {% endfor %}
+            <button type="submit">Prevedi</button>
+        </form>
+
+        {% if predictions %}
+        <div class="result">
+            <h3>Risultati:</h3>
+            <p><strong>Previsione Orecchio Sinistro:</strong> {{ predictions.left }}</p>
+            <p><strong>Percentuale Deviazione Sinistro:</strong> {{ percentages.left }}%</p>
+            <p><strong>Previsione Orecchio Destro:</strong> {{ predictions.right }}</p>
+            <p><strong>Percentuale Deviazione Destro:</strong> {{ percentages.right }}%</p>
+        </div>
+        {% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="error">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <footer>
+        <p style="text-align: center; font-size: 14px; color: #555;">
+            Nota: Questo sistema utilizza modelli di machine learning per prevedere la presenza di problemi uditivi in ​​base ai valori di frequenza audiometrica immessi.
+        </p>
+    </footer>
+</body>
+</html>
